@@ -1,7 +1,9 @@
 #include <inttypes.h>
 #include <U8g2lib.h>
 #include <Arduino_GFX_Library.h>
-#include <Wire.h>
+// #include <Wire.h>
+// #include "mqttSubscribe.h"
+#include "mqttForESP32S3.h"
 
 Arduino_ESP32RGBPanel *bus = new Arduino_ESP32RGBPanel(
     GFX_NOT_DEFINED /* CS */, GFX_NOT_DEFINED /* SCK */, GFX_NOT_DEFINED /* SDA */,
@@ -187,11 +189,14 @@ void drawSpeedNumbers(int x, int y, int speed) {
 }
 
 void setup() {
-  Wire.begin(I2Caddress);
-  Wire.onReceive(receiveNumber);
-
   Serial.begin(115200);
   printf("---SETUP---\n");
+
+  // Wire.begin(I2Caddress);
+  // Wire.onReceive(receiveNumber);
+  // setupMQTTSubscribe();
+  mqttSetup();
+
   gfx->begin();
   gfx->fillScreen(BACKGROUND);
 
@@ -219,6 +224,9 @@ void setup() {
 }
 
 void loop() {
+  // loopMQTTSubscribe();
+  mqttLoop();
+
   for (int i = 0; i < 100; i++){
   // for (int i = 99; i > -1; i--){
     batterySocGraph.oldValue = drawHorizontalGraph(batterySocGraph, 100-i);
@@ -231,13 +239,13 @@ void loop() {
   }
 }
 
-void receiveNumber(int numBytes) {
-  Serial.println("In receiveNumber method");
-  int receivedData;
-  while (Wire.available()) {
-    Wire.readBytes((uint8_t*)&receivedData, sizeof(receivedData)); // Read the integer from the I2C bus
-    Serial.print("Received integer: ");
-    Serial.println(receivedData);
-    drawSpeedNumbers(speedCoordinates.x, speedCoordinates.y, receivedData);
-  }
-}
+// void receiveNumber(int numBytes) {
+//   Serial.println("In receiveNumber method");
+//   int receivedData;
+//   while (Wire.available()) {
+//     Wire.readBytes((uint8_t*)&receivedData, sizeof(receivedData)); // Read the integer from the I2C bus
+//     Serial.print("Received integer: ");
+//     Serial.println(receivedData);
+//     drawSpeedNumbers(speedCoordinates.x, speedCoordinates.y, receivedData);
+//   }
+// }
