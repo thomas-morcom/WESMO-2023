@@ -225,7 +225,7 @@ void loop() {
     powerGraph.oldValue = drawVerticalGraph(powerGraph, ((100-i)%50)*2);
     brakeGraph.oldValue = drawVerticalGraph(brakeGraph, ((100-i)%20)*5);
     acceleratorGraph.oldValue = drawVerticalGraph(acceleratorGraph, ((i)%20)*5);
-    // drawSpeedNumbers(speedCoordinates.x, speedCoordinates.y, i);
+    drawSpeedNumbers(speedCoordinates.x, speedCoordinates.y, i);
 
     delay(100);
   }
