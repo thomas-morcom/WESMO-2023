@@ -1,8 +1,6 @@
 #include <inttypes.h>
 #include <U8g2lib.h>
 #include <Arduino_GFX_Library.h>
-// #include <Wire.h>
-// #include "mqttSubscribe.h"
 #include "mqttForESP32S3.h"
 
 Arduino_ESP32RGBPanel *bus = new Arduino_ESP32RGBPanel(
@@ -192,10 +190,8 @@ void setup() {
   Serial.begin(115200);
   printf("---SETUP---\n");
 
-  // Wire.begin(I2Caddress);
-  // Wire.onReceive(receiveNumber);
-  // setupMQTTSubscribe();
-  mqttSetup();
+  // mqttSetup();
+  // printf("After MQTT Setup\n");
 
   gfx->begin();
   gfx->fillScreen(BACKGROUND);
@@ -224,8 +220,10 @@ void setup() {
 }
 
 void loop() {
-  // loopMQTTSubscribe();
-  mqttLoop();
+  Serial.println("In the loop");
+  printf("But different\n");
+  // mqttLoop();
+  int speed = 0;
 
   for (int i = 0; i < 100; i++){
   // for (int i = 99; i > -1; i--){
@@ -233,19 +231,11 @@ void loop() {
     powerGraph.oldValue = drawVerticalGraph(powerGraph, ((100-i)%50)*2);
     brakeGraph.oldValue = drawVerticalGraph(brakeGraph, ((100-i)%20)*5);
     acceleratorGraph.oldValue = drawVerticalGraph(acceleratorGraph, ((i)%20)*5);
-    drawSpeedNumbers(speedCoordinates.x, speedCoordinates.y, i);
 
-    delay(100);
+    // speed = ((double)getSpeed()/4096)*100.0;
+    speed = i;
+    drawSpeedNumbers(speedCoordinates.x, speedCoordinates.y, speed);
+
+    delay(200);
   }
 }
-
-// void receiveNumber(int numBytes) {
-//   Serial.println("In receiveNumber method");
-//   int receivedData;
-//   while (Wire.available()) {
-//     Wire.readBytes((uint8_t*)&receivedData, sizeof(receivedData)); // Read the integer from the I2C bus
-//     Serial.print("Received integer: ");
-//     Serial.println(receivedData);
-//     drawSpeedNumbers(speedCoordinates.x, speedCoordinates.y, receivedData);
-//   }
-// }

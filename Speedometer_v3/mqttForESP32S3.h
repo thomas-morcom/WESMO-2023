@@ -5,4 +5,6 @@ void mqttSetup();
 
 void mqttLoop();
 
+int getSpeed();
+
 #endif
